@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utilities Tracker - Optimized Layout</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+    .container { max-width: 1000px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    h2 { color: #2c3e50; margin-bottom: 20px; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; }
+    
+    .bill-input { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #e0e0e0; }
+    .bill-input div { display: flex; flex-direction: column; }
+    .bill-input label { font-size: 12px; font-weight: bold; color: #555; margin-bottom: 5px; }
+    .bill-input input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+    
+    .lbl-mem { color: #2e7d32 !important; } 
+    .lbl-home { color: #c62828 !important; } 
+
+    .summary-total { width: 100%; margin-top: 5px; font-size: 1.3em; font-weight: bold; color: #2e7d32; padding: 15px 0; border-top: 2px solid #4CAF50; }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; table-layout: fixed; }
+    th, td { border: 1px solid #ddd; padding: 12px; text-align: left; overflow: hidden; }
+    th { background-color: #4CAF50; color: white; text-transform: uppercase; font-size: 11px; }
+    
+    .editable { cursor: pointer; background-color: #fffde7; outline: none; }
+    .editable:focus { background-color: #fff59d; border: 1px solid #fbc02d; }
+
+    .total-row { font-weight: bold; background-color: #e8f5e9 !important; color: #2e7d32; }
+    
+    .logic-box { background: #e3f2fd; border-left: 5px solid #2196F3; padding: 15px; margin-top: 20px; font-size: 14px; color: #0d47a1; border-radius: 4px; }
+    
+    /* Bottom Button styling */
+    .btn-container { margin-top: 20px; text-align: left; }
+    .add-btn { background: #4CAF50; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .add-btn:hover { background: #45a049; }
+
+    .remove-btn { color: #f44336; cursor: pointer; font-weight: bold; }
+    .save-msg { color: #4CAF50; font-size: 14px; font-weight: bold; float: right; display: none; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="save-msg" id="saveMsg">Changes Saved!</div>
+  <h2 id="billTitle" contenteditable="true" oninput="syncMonth()">Utilities Bill - April 2025</h2>
+  
+  <div class="bill-input">
+    <div><label class="lbl-mem">Motor (Member Base)</label><input type="number" id="motor" value="0" oninput="runCalc()"></div>
+    <div><label class="lbl-mem">Water (Member Base)</label><input type="number" id="water" value="0" oninput="runCalc()"></div>
+    <div><label class="lbl-home">Garbage (Home Base)</label><input type="number" id="garbage" value="0" oninput="runCalc()"></div>
+    <div><label class="lbl-home">Emergency (Home Base)</label><input type="number" id="emergency" value="0" oninput="runCalc()"></div>
+    <div><label class="lbl-home">Others (Home Base)</label><input type="number" id="others" value="0" oninput="runCalc()"></div>
+  </div>
+  
+  <div class="summary-total">Total Combined Expenses: ₹<span id="combTotal">0.0</span></div>
+
+  <table id="billTable">
+    <thead>
+      <tr>
+        <th style="width: 18%;">Type</th>
+        <th style="width: 18%;">Home Name</th>
+        <th style="width: 12%;">No. Members</th>
+        <th style="width: 16%;">Per Home Cost</th>
+        <th style="width: 14%;">Month</th>
+        <th style="width: 14%;">Total Amount</th>
+        <th style="width: 8%;">Action</th>
+      </tr>
+    </thead>
+    <tbody id="rowsArea">
+      <tr>
+        <td class="editable" contenteditable="true">Motor & Water</td>
+        <td class="editable" contenteditable="true">Home 1</td>
+        <td class="editable" contenteditable="true">3</td>
+        <td class="per-home-display" style="color: #c62828; font-weight: bold;">0.00</td>
+        <td class="editable" contenteditable="true">April</td>
+        <td style="font-weight: bold; color: #2c3e50;">0.0</td>
+        <td><span class="remove-btn" onclick="deleteRow(this)">Remove</span></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr class="total-row">
+        <td colspan="2" style="text-align: right;">GRAND TOTAL:</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td id="grandTotalDisplay">0.0</td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="logic-box">
+    <strong>Calculation Method Summary:</strong><br>
+    <p>• <span style="color:#2e7d32; font-weight: bold;">Motor & Water:</span> Sum of these is divided by total members. Homes pay based on their <b>No. Members</b>.</p>
+    <p>• <span style="color:#c62828; font-weight: bold;">Garbage, Emergency & Others:</span> Sum of these is divided equally by total homes. This share is the <b>Per Home Cost</b>.</p>
+  </div>
+
+  <div class="btn-container">
+    <button class="add-btn" onclick="addNewRow()">+ Add Home</button>
+  </div>
+</div>
+
+<script>
+  window.onload = () => {
+    const data = JSON.parse(localStorage.getItem('util_final_v5') || '{}');
+    if (data.rows) {
+      document.getElementById('rowsArea').innerHTML = data.rows;
+      document.getElementById('motor').value = data.motor || 0;
+      document.getElementById('water').value = data.water || 0;
+      document.getElementById('garbage').value = data.garbage || 0;
+      document.getElementById('emergency').value = data.emergency || 0;
+      document.getElementById('others').value = data.others || 0;
+      document.getElementById('billTitle').innerText = data.title || "Utilities Bill - April 2025";
+    }
+    runCalc();
+  };
+
+  function runCalc() {
+    const m = parseFloat(document.getElementById('motor').value) || 0;
+    const w = parseFloat(document.getElementById('water').value) || 0;
+    const g = parseFloat(document.getElementById('garbage').value) || 0;
+    const e = parseFloat(document.getElementById('emergency').value) || 0;
+    const o = parseFloat(document.getElementById('others').value) || 0;
+
+    const totalBill = m + w + g + e + o;
+    document.getElementById('combTotal').innerText = totalBill.toFixed(1);
+
+    const rows = document.querySelectorAll('#rowsArea tr');
+    let totalMembers = 0;
+    rows.forEach(r => totalMembers += parseFloat(r.cells[2].innerText) || 0);
+
+    const mWRate = totalMembers > 0 ? (m + w) / totalMembers : 0;
+    const perHomeFlat = rows.length > 0 ? (g + e + o) / rows.length : 0;
+
+    let gTotal = 0;
+    rows.forEach(r => {
+      const memCount = parseFloat(r.cells[2].innerText) || 0;
+      r.cells[3].innerText = perHomeFlat.toFixed(2);
+      const homeFinalTotal = (mWRate * memCount) + perHomeFlat;
+      r.cells[5].innerText = homeFinalTotal.toFixed(1);
+      gTotal += homeFinalTotal;
+    });
+
+    document.getElementById('grandTotalDisplay').innerText = gTotal.toFixed(1);
+    saveAll();
+  }
+
+  function syncMonth() {
+    const title = document.getElementById('billTitle').innerText;
+    const match = title.match(/Bill - (\w+)/i);
+    if (match) {
+      document.querySelectorAll('#rowsArea tr').forEach(r => r.cells[4].innerText = match[1]);
+    }
+    saveAll();
+  }
+
+  function saveAll() {
+    const data = {
+      rows: document.getElementById('rowsArea').innerHTML,
+      motor: document.getElementById('motor').value,
+      water: document.getElementById('water').value,
+      garbage: document.getElementById('garbage').value,
+      emergency: document.getElementById('emergency').value,
+      others: document.getElementById('others').value,
+      title: document.getElementById('billTitle').innerText
+    };
+    localStorage.setItem('util_final_v5', JSON.stringify(data));
+    const msg = document.getElementById('saveMsg');
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 1000);
+  }
+
+  document.getElementById('rowsArea').addEventListener('input', runCalc);
+
+  function deleteRow(btn) {
+    btn.closest('tr').remove();
+    runCalc();
+  }
+
+  function addNewRow() {
+    const tbody = document.getElementById('rowsArea');
+    const month = tbody.rows.length > 0 ? tbody.rows[0].cells[4].innerText : "April";
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="editable" contenteditable="true">Motor & Water</td>
+      <td class="editable" contenteditable="true">New Home</td>
+      <td class="editable" contenteditable="true">0</td>
+      <td class="per-home-display" style="color: #c62828; font-weight: bold;">0.00</td>
+      <td class="editable" contenteditable="true">${month}</td>
+      <td style="font-weight: bold; color: #2c3e50;">0.0</td>
+      <td><span class="remove-btn" onclick="deleteRow(this)">Remove</span></td>
+    `;
+    tbody.appendChild(tr);
+    runCalc();
+  }
+</script>
+
+</body>
+</html>
