@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMRDA Layout Property - Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 1em;
+            font-weight: 600;
+            color: #495057;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab:hover {
+            background: #e9ecef;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #2a5298;
+            border-bottom: 3px solid #2a5298;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .info-card {
+            background: #f8f9fa;
+            border-left: 4px solid #2a5298;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .info-card h3 {
+            color: #2a5298;
+            margin-bottom: 10px;
+        }
+        
+        .process-step {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: all 0.3s;
+        }
+        
+        .process-step:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .step-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .step-details {
+            color: #495057;
+            line-height: 1.6;
+            margin-left: 55px;
+        }
+        
+        .checklist {
+            list-style: none;
+        }
+        
+        .checklist li {
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .checklist li:hover {
+            background: #f8f9fa;
+            border-color: #2a5298;
+        }
+        
+        .checklist li.checked {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ced4da;
+            border-radius: 4px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .checklist li.checked .checkbox {
+            background: #28a745;
+            border-color: #28a745;
+        }
+        
+        .checklist li.checked .checkbox::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+        }
+        
+        .authority-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .authority-card h4 {
+            color: #2a5298;
+            margin-bottom: 8px;
+        }
+        
+        .timeline {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 15px 0;
+        }
+        
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            background: #2a5298;
+            border-radius: 50%;
+            margin-right: 15px;
+            margin-top: 5px;
+            flex-shrink: 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .fee-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .fee-table th, .fee-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .fee-table th {
+            background: #2a5298;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .fee-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .progress-tracker {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .tab {
+                padding: 12px 15px;
+                font-size: 0.9em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏗️ BMRDA Layout Property Guide</h1>
+            <p>Complete End-to-End Process & Document Checklist</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab(event, 'overview')">📋 Overview</button>
+            <button class="tab" onclick="openTab(event, 'documents')">📄 Documents</button>
+            <button class="tab" onclick="openTab(event, 'process')">⚙️ Process</button>
+            <button class="tab" onclick="openTab(event, 'authorities')">🏛️ Authorities</button>
+            <button class="tab" onclick="openTab(event, 'fees')">💰 Fees & Timeline</button>
+            <button class="tab" onclick="openTab(event, 'verification')">✅ Verification</button>
+        </div>
+        
+        <div class="content">
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-content active">
+                <h2>What is BMRDA?</h2>
+                <div class="info-card">
+                    <h3>Bangalore Metropolitan Region Development Authority</h3>
+                    <p><strong>Established:</strong> 2007 (under BMRDA Act 1985)</p>
+                    <p><strong>Coverage:</strong> 8,005 sq. km across Bangalore Urban, Bangalore Rural, and Ramanagara districts</p>
+                    <p><strong>Key Difference from BDA:</strong> BMRDA doesn't acquire land but approves projects that meet strict infrastructure and development guidelines.</p>
+                </div>
+                
+                <div class="success-box">
+                    <h3>✅ What BMRDA Approval Means</h3>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Layout verified for proper road width, drainage, parks</li>
+                        <li>Adherence to land use zoning regulations</li>
+                        <li>Legal and safe for investment</li>
+                        <li>Eligible for property registration and utility connections</li>
+                        <li>Compliance with minimum standards (road width, park allocation, OSR, drainage)</li>
+                    </ul>
+                </div>
+                
+                <div class="warning-box">
+                    <h3>⚠️ Important Notes</h3>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>BMRDA doesn't directly approve layouts - Local Planning Authorities (LPAs) do</li>
+                        <li>Always verify approval directly with the issuing LPA</li>
+                        <li>Non-approved or revenue layouts lack essential infrastructure and legal protection</li>
+                        <li>Check if your property falls under BMRDA approved layout list before purchasing</li>
+                    </ul>
+                </div>
+                
+                <h3 style="margin-top: 30px;">BMRDA vs BDA vs BBMP</h3>
+                <table class="fee-table">
+                    <tr>
+                        <th>Authority</th>
+                        <th>Jurisdiction</th>
+                        <th>Cost</th>
+                    </tr>
+                    <tr>
+                        <td><strong>BDA</strong></td>
+                        <td>Bangalore Urban (city limits)</td>
+                        <td>Highest</td>
+                    </tr>
+                    <tr>
+                        <td><strong>BMRDA</strong></td>
+                        <td>Outside BDA limits (metropolitan region)</td>
+                        <td>Moderate</td>
+                    </tr>
+                    <tr>
+                        <td><strong>BBMP</strong></td>
+                        <td>Greater Bengaluru civic body</td>
+                        <td>Varies</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Documents Tab -->
+            <div id="documents" class="tab-content">
+                <h2>📄 Required Documents Checklist</h2>
+                <p style="margin-bottom: 20px;">Click on each item to mark as collected</p>
+                
+                <div class="progress-tracker">
+                    <h3>Document Collection Progress</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="docProgress"></div>
+                    </div>
+                    <p id="progressText">0 of 15 documents collected</p>
+                </div>
+                
+                <h3 style="margin-top: 30px;">🔹 Ownership & Title Documents</h3>
+                <ul class="checklist" id="ownershipDocs">
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>Sale Deed / Mother Deed</strong><br>
+                            <small>Registered deed proving legal ownership of the property</small>
+                        </div>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>Title Deed</strong><br>
+                            <small>Complete chain of ownership from original owner to current</small>
+                        </div>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>Encumbrance Certificate (EC)</strong><br>
+                            <small>13-30 years history showing no mortgages or legal disputes</small>
+                        </div>
+                    </li>
+                </ul>
+                
+                <h3 style="margin-top: 30px;">🔹 Property Records</h3>
+                <ul class="checklist" id="propertyDocs">
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>Khata Certificate & Extract</strong><br>
+                            <small>Property tax records from BBMP/Gram Panchayat</small>
+                        </div>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>Latest Tax Paid Receipt</strong><br>
+                            <small>Proof of up-to-date property tax payment</small>
+                        </div>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>Site Plan / Survey Sketch</strong><br>
+                            <small>Detailed site dimensions and boundaries</small>
+                        </div>
+                    </li>
+                </ul>
+                
+                <h3 style="margin-top: 30px;">🔹 Approval Documents</h3>
+                <ul class="checklist" id="approvalDocs">
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>BMRDA/LPA Layout Approval Certificate</strong><br>
+                            <small>Official approval from Local Planning Authority</small>
+                        </div>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>Approved Layout Plan</strong><br>
+                            <small>Detailed layout showing roads, drainage, parks, plot divisions</small>
+                        </div>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>Conversion Order (if applicable)</strong><br>
+                            <small>Agricultural to non-agricultural land conversion</small>
+                        </div>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>Change of Land Use (CLU) - if required</strong><br>
+                            <small>Approval from CM's office or Government Officer</small>
+                        </div>
+                    </li>
+                </ul>
+                
+                <h3 style="margin-top: 30px;">🔹 Building Plan Documents (for construction)</h3>
+                <ul class="checklist" id="buildingDocs">
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>Building Plan Sanction</strong><br>
+                            <small>Architectural and structural drawings approved by LPA</small>
+                        </div>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>NOCs (No Objection Certificates)</strong><br>
+                            <small>From BESCOM, BWSSB, Fire, Pollution Control, etc.</small>
+                        </div>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>Occupancy Certificate (OC)</strong><br>
+                            <small>Issued after construction completion (for existing buildings)</small>
+                        </div>
+                    </li>
+                </ul>
+                
+                <h3 style="margin-top: 30px;">🔹 Personal Documents</h3>
+                <ul class="checklist" id="personalDocs">
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>ID Proof - Aadhaar Card</strong><br>
+                            <small>Government-issued identity proof</small>
+                        </div>
+                    </li>
+                    <li onclick="toggleCheck(this)">
+                        <div class="checkbox"></div>
+                        <div>
+                            <strong>PAN Card</strong><br>
+                            <small>Permanent Account Number for tax purposes</small>
+                        </div>
+                    </li>
+                </ul>
+                
+                <div class="warning-box" style="margin-top: 30px;">
+                    <h3>📌 Important Notes</h3>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Requirements may vary by property type and location</li>
+                        <li>Consult with a real estate lawyer for case-specific guidance</li>
+                        <li>Older properties might not have all documents (e.g., BMRDA allotment letters)</li>
+                        <li>Always verify documents directly with issuing authorities</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Process Tab -->
+            <div id="process" class="tab-content">
+                <h2>⚙️ End-to-End Process</h2>
+                
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Property Jurisdiction Verification</div>
+                    <div class="step-details">
+                        <p><strong>Action:</strong> Confirm whether your property falls under BMRDA jurisdiction (outside BDA limits)</p>
+                        <p><strong>Check:</strong> Location should be in Bangalore Urban/Rural/Ramanagara districts but outside BBMP/BDA limits</p>
+                        <p><strong>Identify:</strong> Which Local Planning Authority (LPA) governs your area:
+                            <ul style="margin-top: 8px;">
+                                <li>Anekal Planning Authority</li>
+                                <li>Hoskote Planning Authority</li>
+                                <li>Nelamangala Planning Authority</li>
+                                <li>Bangalore Bidadi Smart City Planning Authority (BIAAPA)</li>
+                                <li>Magadi Planning Authority</li>
+                                <li>Kanakapura Planning Authority</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Land Preparation & Conversion (if needed)</div>
+                    <div class="step-details">
+                        <p><strong>For Agricultural Land:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Obtain Conversion Order to convert agricultural land to non-agricultural</li>
+                            <li>If zoning differs from intended use, apply for Change of Land Use (CLU)</li>
+                            <li>CLU approval comes from Chief Minister's Office via BDA/BMRDA/LPA</li>
+                            <li><strong>Timeline:</strong> 6-9 months for CLU</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Layout Plan Preparation</div>
+                    <div class="step-details">
+                        <p><strong>Engage:</strong> Licensed architect or planner familiar with BMRDA regulations</p>
+                        <p><strong>Design must include:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Minimum road width compliance</li>
+                            <li>Park allocation as per norms</li>
+                            <li>Open Space Reservation (OSR)</li>
+                            <li>Proper drainage provisions</li>
+                            <li>Plot divisions and dimensions</li>
+                            <li>Setback requirements</li>
+                            <li>FAR (Floor Area Ratio) compliance</li>
+                        </ul>
+                        <p style="margin-top: 8px;"><strong>Note:</strong> Layout sanction required if land area exceeds 2.5 acres</p>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Document Collection & Verification</div>
+                    <div class="step-details">
+                        <p><strong>Gather all required documents</strong> (see Documents tab)</p>
+                        <p><strong>Key verifications:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Encumbrance Certificate check (13-30 years)</li>
+                            <li>Title deed chain verification</li>
+                            <li>Survey number matching</li>
+                            <li>Boundary verification</li>
+                            <li>Khata certificate validation</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Application Submission</div>
+                    <div class="step-details">
+                        <p><strong>Fill BMRDA/LPA application form manually</strong></p>
+                        <p><strong>Submit package includes:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Completed application form with signatures</li>
+                            <li>All ownership and title documents</li>
+                            <li>Approved layout plan blueprints</li>
+                            <li>Sanction drawings per zoning regulations</li>
+                            <li>Affidavits as required</li>
+                            <li>ID proofs and photographs</li>
+                        </ul>
+                        <p style="margin-top: 8px;"><strong>Submit to:</strong> Relevant LPA office (not BMRDA directly)</p>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Document & Drawing Verification</div>
+                    <div class="step-details">
+                        <p><strong>Authority Review:</strong> LPA officials verify all documents and drawings</p>
+                        <p><strong>Checks include:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Compliance with zoning regulations</li>
+                            <li>Road width, drainage, park allocations</li>
+                            <li>Survey number accuracy</li>
+                            <li>Legal ownership validation</li>
+                            <li>Building bye-laws compliance</li>
+                        </ul>
+                        <p style="margin-top: 8px;"><strong>Timeline:</strong> 2-4 weeks typically</p>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">7</div>
+                    <div class="step-title">Site Inspection</div>
+                    <div class="step-details">
+                        <p><strong>Physical Verification:</strong> Engineer or case worker visits the site</p>
+                        <p><strong>Inspection covers:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Physical boundaries match approved plan</li>
+                            <li>Road access verification</li>
+                            <li>Infrastructure availability check</li>
+                            <li>Drainage and water provisions</li>
+                            <li>No encroachments or disputes</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">8</div>
+                    <div class="step-title">Fee Payment</div>
+                    <div class="step-details">
+                        <p><strong>Receive:</strong> Demand notes/challans for various fees</p>
+                        <p><strong>Fee components include:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Application fees</li>
+                            <li>Scrutiny charges</li>
+                            <li>Development charges</li>
+                            <li>Betterment charges</li>
+                            <li>1% labor cess</li>
+                        </ul>
+                        <p style="margin-top: 8px;"><strong>Note:</strong> Fees vary by plot size and building type (see Fees tab)</p>
+                        <p><strong>Payment:</strong> Pay at designated bank/online and collect receipt</p>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">9</div>
+                    <div class="step-title">Approval Issuance</div>
+                    <div class="step-details">
+                        <p><strong>Receive:</strong> Building plan approval and sanction letter from LPA</p>
+                        <p><strong>Documents issued:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Layout Approval Certificate</li>
+                            <li>Sanctioned plan copy</li>
+                            <li>Approval number for reference</li>
+                        </ul>
+                        <p style="margin-top: 8px;"><strong>Total Timeline:</strong> 30-45 days from complete application submission</p>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">10</div>
+                    <div class="step-title">Construction & Completion (if building)</div>
+                    <div class="step-details">
+                        <p><strong>During Construction:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Follow approved plans strictly</li>
+                            <li>Major deviations require re-approval</li>
+                            <li>Maintain construction permits on-site</li>
+                        </ul>
+                        <p style="margin-top: 8px;"><strong>After Completion:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Apply for Occupancy Certificate (OC)</li>
+                            <li>Final inspection by authorities</li>
+                            <li>OC mandatory for buildings > G+3 floors</li>
+                            <li>For plotted developments: Obtain Release Order (issued in 2 tranches at 40% and 60% completion)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="success-box" style="margin-top: 30px;">
+                    <h3>✅ Post-Approval Benefits</h3>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Legal construction rights</li>
+                        <li>Property registration enabled</li>
+                        <li>Eligible for bank loans</li>
+                        <li>Utility connections (water, electricity, sewage)</li>
+                        <li>Higher resale value</li>
+                        <li>Protection from demolition notices</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Authorities Tab -->
+            <div id="authorities" class="tab-content">
+                <h2>🏛️ BMRDA & Local Planning Authorities</h2>
+                
+                <div class="info-card">
+                    <h3>Understanding the Structure</h3>
+                    <p>BMRDA itself doesn't directly approve individual layouts. Approvals are issued by <strong>Local Planning Authorities (LPAs)</strong> under BMRDA's jurisdiction. There are 13 LPAs within the Bangalore Metropolitan Region.</p>
+                </div>
+                
+                <h3 style="margin-top: 30px;">Local Planning Authorities Under BMRDA</h3>
+                
+                <div class="authority-card">
+                    <h4>1. Anekal Planning Authority</h4>
+                    <p><strong>Coverage:</strong> Anekal Taluk area</p>
+                    <p><strong>Key Areas:</strong> Electronic City surroundings, Chandapura, Attibele region</p>
+                    <p><strong>Contact:</strong> Visit BMRDA office or respective LPA office for contact details</p>
+                </div>
+                
+                <div class="authority-card">
+                    <h4>2. Hoskote Planning Authority</h4>
+                    <p><strong>Coverage:</strong> Hoskote Taluk area</p>
+                    <p><strong>Key Areas:</strong> Hoskote, Whitefield outskirts, industrial belt</p>
+                </div>
+                
+                <div class="authority-card">
+                    <h4>3. Nelamangala Planning Authority</h4>
+                    <p><strong>Coverage:</strong> Nelamangala Taluk area</p>
+                    <p><strong>Key Areas:</strong> NH-4 corridor, Tumkur Road surroundings</p>
+                </div>
+                
+                <div class="authority-card">
+                    <h4>4. BIAAPA (Bangalore International Airport Area Planning Authority)</h4>
+                    <p><strong>Coverage:</strong> Airport region and surroundings</p>
+                    <p><strong>Key Areas:</strong> Devanahalli, airport vicinity developments</p>
+                    <p><strong>Special Note:</strong> Special planning authority for strategic airport area development</p>
+                </div>
+                
+                <div class="authority-card">
+                    <h4>5. Magadi Planning Authority</h4>
+                    <p><strong>Coverage:</strong> Magadi Taluk area</p>
+                    <p><strong>Key Areas:</strong> Magadi Road corridor</p>
+                </div>
+                
+                <div class="authority-card">
+                    <h4>6. Kanakapura Planning Authority</h4>
+                    <p><strong>Coverage:</strong> Kanakapura Taluk area</p>
+                    <p><strong>Key Areas:</strong> Kanakapura Road, Nice Road corridor</p>
+                </div>
+                
+                <div class="authority-card">
+                    <h4>7. Bangalore Bidadi Smart City Planning Authority (BMICAPA)</h4>
+                    <p><strong>Coverage:</strong> Bidadi and surrounding smart city development area</p>
+                    <p><strong>Key Areas:</strong> Bidadi industrial area, Ramanagara district portions</p>
+                </div>
+                
+                <div class="warning-box" style="margin-top: 30px;">
+                    <h3>⚠️ How to Identify Your LPA</h3>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li>Check your property's exact location and taluk</li>
+                        <li>Visit BMRDA website or office with property survey number</li>
+                        <li>Ask your property developer/seller which LPA governs the area</li>
+                        <li>Cross-verify by visiting the LPA office or calling them</li>
+                    </ol>
+                </div>
+                
+                <h3 style="margin-top: 30px;">Other Related Authorities You May Encounter</h3>
+                
+                <table class="fee-table">
+                    <tr>
+                        <th>Authority</th>
+                        <th>Role</th>
+                        <th>When Required</th>
+                    </tr>
+                    <tr>
+                        <td><strong>BDA</strong></td>
+                        <td>Bangalore Development Authority</td>
+                        <td>Properties within BDA city limits (not BMRDA)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>BBMP</strong></td>
+                        <td>Bruhat Bengaluru Mahanagara Palike</td>
+                        <td>Civic body - Khata, tax, building licenses within city</td>
+                    </tr>
+                    <tr>
+                        <td><strong>BESCOM</strong></td>
+                        <td>Bangalore Electricity Supply Company</td>
+                        <td>Electricity connection NOC</td>
+                    </tr>
+                    <tr>
+                        <td><strong>BWSSB</strong></td>
+                        <td>Bangalore Water Supply & Sewerage Board</td>
+                        <td>Water & sewage connection NOC</td>
+                    </tr>
+                    <tr>
+                        <td><strong>KIADB</strong></td>
+                        <td>Karnataka Industrial Areas Development Board</td>
+                        <td>Industrial plots/areas</td>
+                    </tr>
+                </table>
+                
+                <div class="info-card" style="margin-top: 30px;">
+                    <h3>Contact Information</h3>
+                    <p><strong>BMRDA Head Office:</strong> Bangalore Metropolitan Region Development Authority</p>
+                    <p><strong>Address:</strong> Check official website bmrda.karnataka.gov.in for latest contact details</p>
+                    <p><strong>For Specific LPAs:</strong> Visit respective LPA offices or contact through BMRDA</p>
+                    <p style="margin-top: 10px;"><em>Note: Always verify contact information from official government sources as these may change.</em></p>
+                </div>
+            </div>
+            
+            <!-- Fees Tab -->
+            <div id="fees" class="tab-content">
+                <h2>💰 Fees & Timeline</h2>
+                
+                <div class="info-card">
+                    <h3>Fee Structure Overview</h3>
+                    <p>BMRDA approval fees vary significantly based on:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Plot/land size and dimensions</li>
+                        <li>Type of development (residential, commercial, industrial)</li>
+                        <li>Built-up area (for building plan approval)</li>
+                        <li>Number of floors planned</li>
+                        <li>Specific LPA handling the approval</li>
+                    </ul>
+                </div>
+                
+                <h3 style="margin-top: 30px;">Typical Fee Components</h3>
+                
+                <table class="fee-table">
+                    <tr>
+                        <th>Fee Type</th>
+                        <th>Description</th>
+                        <th>Approximate Range</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Application Fee</strong></td>
+                        <td>Basic processing fee for application</td>
+                        <td>₹500 - ₹5,000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Scrutiny Charges</strong></td>
+                        <td>Document and plan verification</td>
+                        <td>₹2,000 - ₹15,000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Development Charges</strong></td>
+                        <td>Infrastructure development contribution</td>
+                        <td>₹10,000 - ₹1,00,000+</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Betterment Charges</strong></td>
+                        <td>Improvement levy for area development</td>
+                        <td>₹5,000 - ₹50,000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Labor Cess</strong></td>
+                        <td>1% of construction cost (for buildings)</td>
+                        <td>1% of project cost</td>
+                    </tr>
+                    <tr>
+                        <td><strong>License Fee</strong></td>
+                        <td>Building construction license</td>
+                        <td>₹3,000 - ₹20,000</td>
+                    </tr>
+                </table>
+                
+                <div class="warning-box" style="margin-top: 30px;">
+                    <h3>⚠️ Cost Examples (Approximate)</h3>
+                    <p style="margin-bottom: 10px;"><strong>Small Residential Plot (30x40 ft):</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>Layout approval: ₹15,000 - ₹30,000</li>
+                        <li>Building plan approval: ₹20,000 - ₹40,000</li>
+                        <li>Total: ₹35,000 - ₹70,000</li>
+                    </ul>
+                    
+                    <p style="margin-bottom: 10px; margin-top: 15px;"><strong>Medium Plot (40x60 ft):</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>Layout approval: ₹25,000 - ₹50,000</li>
+                        <li>Building plan approval: ₹30,000 - ₹80,000</li>
+                        <li>Total: ₹55,000 - ₹1,30,000</li>
+                    </ul>
+                    
+                    <p style="margin-top: 15px;"><em>Note: These are rough estimates. Actual costs vary by LPA, exact specifications, and current government rates. Always check with the relevant LPA for precise fee schedule.</em></p>
+                </div>
+                
+                <h3 style="margin-top: 40px;">⏱️ Timeline Breakdown</h3>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div>
+                            <strong>Land Conversion (if needed):</strong> 3-6 months<br>
+                            <small>Converting agricultural to non-agricultural land</small>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div>
+                            <strong>Change of Land Use (if needed):</strong> 6-9 months<br>
+                            <small>Approval from CM's office via BMRDA/LPA</small>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div>
+                            <strong>Layout Plan Preparation:</strong> 2-4 weeks<br>
+                            <small>By licensed architect/planner</small>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div>
+                            <strong>Document Collection:</strong> 1-3 weeks<br>
+                            <small>Gathering all required documents and certificates</small>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div>
+                            <strong>Application Submission to Approval:</strong> 30-45 days<br>
+                            <small>From complete application to receiving approval letter</small>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div>
+                            <strong>NOCs (if required):</strong> 2-8 weeks<br>
+                            <small>BESCOM, BWSSB, Fire, Pollution Control, etc.</small>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div>
+                            <strong>Occupancy Certificate (post-construction):</strong> 2-4 weeks<br>
+                            <small>After construction completion and final inspection</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="success-box" style="margin-top: 30px;">
+                    <h3>✅ Total Timeline Summary</h3>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Without land conversion/CLU:</strong> 2-3 months</li>
+                        <li><strong>With land conversion only:</strong> 5-9 months</li>
+                        <li><strong>With CLU + conversion:</strong> 9-15 months</li>
+                        <li><strong>Simple building plan approval:</strong> 30-45 days</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><em>Note: Timelines can vary based on document readiness, LPA workload, and any objections or revisions required.</em></p>
+                </div>
+                
+                <h3 style="margin-top: 40px;">💡 Cost-Saving Tips</h3>
+                
+                <div class="info-card">
+                    <ol style="margin-left: 20px;">
+                        <li><strong>Complete documentation upfront:</strong> Avoid delays and resubmission fees</li>
+                        <li><strong>Engage experienced professionals:</strong> Licensed architects familiar with LPA requirements save time and corrections</li>
+                        <li><strong>Buy in BMRDA-approved layouts:</strong> Saves individual layout approval costs</li>
+                        <li><strong>Check fee schedules:</strong> Compare LPA fee structures when choosing property location</li>
+                        <li><strong>Avoid agents for simple tasks:</strong> Many processes can be done directly, saving agent fees</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <!-- Verification Tab -->
+            <div id="verification" class="tab-content">
+                <h2>✅ How to Verify BMRDA Approval</h2>
+                
+                <div class="warning-box">
+                    <h3>🚨 Critical Importance</h3>
+                    <p>Always verify BMRDA/LPA approval BEFORE purchasing any property. Non-approved or fake layouts are common and can lead to:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Loss of investment</li>
+                        <li>Legal disputes and court cases</li>
+                        <li>Demolition notices</li>
+                        <li>No utility connections</li>
+                        <li>Inability to get bank loans</li>
+                        <li>No legal construction rights</li>
+                    </ul>
+                </div>
+                
+                <h3 style="margin-top: 30px;">Step-by-Step Verification Process</h3>
+                
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Request Approval Certificate</div>
+                    <div class="step-details">
+                        <p><strong>Ask seller/developer for:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Official Layout Approval Certificate</li>
+                            <li>Approval number clearly mentioned</li>
+                            <li>Name of issuing LPA (Anekal, Hoskote, etc.)</li>
+                            <li>Approval date</li>
+                            <li>Copy of approved layout plan</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><strong>Red Flag:</strong> If seller cannot provide these immediately, proceed with extreme caution</p>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Visit LPA Office</div>
+                    <div class="step-details">
+                        <p><strong>Physical verification is essential:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Visit the relevant LPA office with certificate copy</li>
+                            <li>Speak with Commissioner or designated official</li>
+                            <li>Cross-verify approval number in their records</li>
+                            <li>Check if layout appears in approved list</li>
+                            <li>Confirm survey numbers match</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><em>Don't rely solely on online checks - physical verification is crucial</em></p>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Check Online Records</div>
+                    <div class="step-details">
+                        <p><strong>Visit BMRDA/LPA websites:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Go to bmrda.karnataka.gov.in</li>
+                            <li>Check for published lists of approved layouts</li>
+                            <li>Verify layout is NOT in unauthorized/illegal list</li>
+                            <li>Some LPAs have online verification portals</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><strong>Note:</strong> Not all LPAs have complete online databases - office visit remains necessary</p>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Document Cross-Verification</div>
+                    <div class="step-details">
+                        <p><strong>Check consistency across all documents:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Survey numbers match in EC, sale deed, layout plan</li>
+                            <li>Plot numbers/CA site numbers are consistent</li>
+                            <li>Boundaries and dimensions match site plan</li>
+                            <li>Road widths match approved layout</li>
+                            <li>Park/amenity allocations are as per approval</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><strong>Any mismatch = Major Red Flag</strong></p>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Physical Site Inspection</div>
+                    <div class="step-details">
+                        <p><strong>Visit the actual site with a licensed surveyor:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Verify physical boundaries match plan</li>
+                            <li>Check if roads are laid as per approved width</li>
+                            <li>Confirm drainage systems exist</li>
+                            <li>Parks/open spaces allocated as approved</li>
+                            <li>No encroachments on your plot</li>
+                            <li>Infrastructure promised actually exists</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><em>Many fraudulent layouts show perfect plans but have no ground reality</em></p>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Legal Due Diligence</div>
+                    <div class="step-details">
+                        <p><strong>Engage a property lawyer to verify:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Encumbrance Certificate (EC) for 13-30 years</li>
+                            <li>Title deed chain of ownership</li>
+                            <li>No pending litigation or court cases</li>
+                            <li>No mortgages or third-party claims</li>
+                            <li>Conversion orders (if agricultural land)</li>
+                            <li>All NOCs obtained properly</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="process-step">
+                    <div class="step-number">7</div>
+                    <div class="step-title">Bank/Financial Institution Check</div>
+                    <div class="step-details">
+                        <p><strong>If taking a loan:</strong></p>
+                        <ul style="margin-top: 8px;">
+                            <li>Banks conduct independent legal verification</li>
+                            <li>Will not approve loans for non-approved layouts</li>
+                            <li>Bank rejection is a strong warning signal</li>
+                            <li>Use bank's technical team's assessment as additional verification</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 40px;">🚩 Red Flags to Watch For</h3>
+                
+                <div class="warning-box">
+                    <ul style="margin-left: 20px;">
+                        <li>Seller cannot produce original approval certificate</li>
+                        <li>Approval certificate looks fake or poorly photocopied</li>
+                        <li>LPA office has no record of approval number</li>
+                        <li>Layout appears in unauthorized/illegal list</li>
+                        <li>Survey numbers don't match across documents</li>
+                        <li>Physical site doesn't match approved plan</li>
+                        <li>Roads narrower than approved width</li>
+                        <li>Missing parks or open spaces shown in plan</li>
+                        <li>Seller pressures you to skip verification</li>
+                        <li>Price is suspiciously low compared to genuine approved layouts</li>
+                        <li>Encumbrance Certificate shows disputes or mortgages</li>
+                        <li>Agricultural land without proper conversion order</li>
+                    </ul>
+                </div>
+                
+                <h3 style="margin-top: 40px;">✅ Documents to Verify</h3>
+                
+                <div class="info-card">
+                    <ol style="margin-left: 20px;">
+                        <li><strong>Sale Deed / Mother Deed</strong> - Registered and genuine</li>
+                        <li><strong>Title Deed</strong> - Clear ownership chain</li>
+                        <li><strong>Layout Approval Certificate</strong> - From correct LPA with valid number</li>
+                        <li><strong>Approved Layout Plan</strong> - Matches physical site</li>
+                        <li><strong>Encumbrance Certificate</strong> - 13-30 years, clean</li>
+                        <li><strong>Khata Certificate</strong> - Up-to-date and valid</li>
+                        <li><strong>Conversion Order</strong> - If previously agricultural</li>
+                        <li><strong>Tax Receipts</strong> - Current and paid</li>
+                        <li><strong>NOCs</strong> - All required clearances obtained</li>
+                        <li><strong>Building Plan Approval</strong> - If purchasing constructed property</li>
+                    </ol>
+                </div>
+                
+                <div class="success-box" style="margin-top: 30px;">
+                    <h3>✅ Best Practices</h3>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Never rely on seller's word alone - verify everything independently</li>
+                        <li>Hire a reputable property lawyer for due diligence</li>
+                        <li>Visit LPA office in person - don't skip this step</li>
+                        <li>Conduct physical site inspection with surveyor</li>
+                        <li>Check with neighbors about layout's history</li>
+                        <li>If buying from developer, check their track record</li>
+                        <li>Avoid properties with ongoing litigation</li>
+                        <li>Get everything in writing</li>
+                        <li>Don't rush - proper verification takes time</li>
+                        <li>When in doubt, walk away</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card" style="margin-top: 30px;">
+                    <h3>💡 Professional Help</h3>
+                    <p>Consider engaging:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Property Lawyer:</strong> For complete legal due diligence</li>
+                        <li><strong>Licensed Surveyor:</strong> For physical site verification</li>
+                        <li><strong>Real Estate Consultant:</strong> Familiar with local LPA processes</li>
+                        <li><strong>Architect:</strong> To verify building potential and compliance</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><em>Professional fees are worth it compared to potential loss from fraudulent properties</em></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabContent, tabLinks;
+            
+            tabContent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabContent.length; i++) {
+                tabContent[i].classList.remove("active");
+            }
+            
+            tabLinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tabLinks.length; i++) {
+                tabLinks[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+        
+        function toggleCheck(element) {
+            element.classList.toggle('checked');
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            const allItems = document.querySelectorAll('.checklist li');
+            const checkedItems = document.querySelectorAll('.checklist li.checked');
+            const total = allItems.length;
+            const checked = checkedItems.length;
+            const percentage = (checked / total) * 100;
+            
+            document.getElementById('docProgress').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `${checked} of ${total} documents collected`;
+        }
+    </script>
+</body>
+</html>
